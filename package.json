@@ -1,0 +1,29 @@
+{
+  "name": "BruhBot",
+  "version": "1.0.0",
+  "description": "Don't ask any questions. Don't look into it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Michael Repton",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/healzer/DiscordEarsBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/healzer/DiscordEarsBot/issues"
+  },
+  "homepage": "https://github.com/healzer/DiscordEarsBot#readme",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.1.0",
+    "@google-cloud/speech": "^4.1.1",
+    "@google-cloud/text-to-speech": "^3.0.1",
+    "discord.js": "^12.2.0",
+    "request": "^2.88.2",
+    "sox-audio": "git://github.com/healzer/sox-audio.git",
+    "underscore": "^1.10.2"
+  }
+}
