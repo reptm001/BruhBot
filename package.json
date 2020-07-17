@@ -10,12 +10,12 @@
   "author": "Michael Repton",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/healzer/DiscordEarsBot.git"
+    "url": "git+https://github.com/reptm001/BruhBot"
   },
   "bugs": {
-    "url": "https://github.com/healzer/DiscordEarsBot/issues"
+    "url": "https://github.com/reptm001/BruhBot/issues"
   },
-  "homepage": "https://github.com/healzer/DiscordEarsBot#readme",
+  "homepage": "https://github.com/reptm001/BruhBot#README",
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
