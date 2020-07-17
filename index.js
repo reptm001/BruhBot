@@ -386,7 +386,7 @@ async function process_commands_query(txt, mapKey, user) {
 		let val = guildMap.get(mapKey);
 		if (TRANSCRIBE == true)
 			val.text_Channel.send(user.username + ': ' + txt);
-		fs.appendFile('log.txt', txt, function (err) {
+		fs.appendFile('log.txt', txt + '\n', function (err) {
 			if (err) throw err;
 			console.log('Log file appended');
 		});
