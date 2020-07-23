@@ -129,6 +129,7 @@ const _CMD_LEAVE       = PREFIX + 'leave';
 const _CMD_DEBUG       = PREFIX + 'debug';
 const _CMD_TEST        = PREFIX + 'hello';
 const _CMD_TRANSCRIBE  = PREFIX + 'transcribe';
+const _CMD_JOKE		   = PREFIX + 'joke';
 
 const guildMap = new Map();
 
@@ -151,7 +152,8 @@ discordClient.on('message', async (msg) => {
                 else
                     msg.reply('Already connected')
             }
-        } else if (msg.content.trim().toLowerCase() == _CMD_LEAVE) {
+        } 
+		else if (msg.content.trim().toLowerCase() == _CMD_LEAVE) {
             if (guildMap.has(mapKey)) {
                 let val = guildMap.get(mapKey);
                 if (val.voice_Channel) val.voice_Channel.leave()
@@ -162,7 +164,8 @@ discordClient.on('message', async (msg) => {
             } else {
                 msg.reply("Cannot leave because not connected.")
             }
-        } else if (msg.content.trim().toLowerCase() == _CMD_HELP) {
+        } 
+		else if (msg.content.trim().toLowerCase() == _CMD_HELP) {
             msg.reply(getHelpString());
         }
         else if (msg.content.trim().toLowerCase() == _CMD_DEBUG) {
@@ -174,16 +177,24 @@ discordClient.on('message', async (msg) => {
                 val.debug = true;
         }
         else if (msg.content.trim().toLowerCase() == _CMD_TEST) {
-            msg.reply('hello back =)')
+            msg.reply("hello back =)")
         }
 		else if (msg.content.trim().toLowerCase() == _CMD_TRANSCRIBE) {
             if (TRANSCRIBE == false) {
 				TRANSCRIBE = true;
-				msg.reply('[Transcribe: ON]');
+				msg.reply("[Transcribe: ON]");
 			} 
 			else {
 				TRANSCRIBE = false;
-				msg.reply('[Transcribe: OFF]');
+				msg.reply("[Transcribe: OFF]");
+			}
+        }
+		else if (msg.content.trim().toLowerCase() == _CMD_JOKE) {
+            if (guildMap.has(mapKey)) {
+				msg.reply("Sure thing ;)");
+				tellJoke(mapKey);
+			} else {
+				msg.reply("BruhBot is not currently connected.")
 			}
         }
     } catch (e) {
@@ -198,6 +209,7 @@ function getHelpString() {
         out += PREFIX + 'join\n';
         out += PREFIX + 'leave\n';
 		out += PREFIX + 'transcribe\n';
+		out += PREFIX + 'joke\n';
         out += '```'
     return out;
 }
@@ -337,6 +349,22 @@ function playFile(file, mapKey) {
 	}
 }
 
+const request = require('request');
+function tellJoke(mapKey) {
+	request('https://sv443.net/jokeapi/v2/joke/Any?type=twopart', {json: true}, (err, res, body) => {
+		if (err) { console.error('Error: ', err); } // Print the error if one occurred
+		else {
+			console.log(body.setup);
+			console.log(body.delivery); 
+			tts('here is a joke, now everyone shut the fuck up and listen closely', mapKey);
+			//sleep(1000);
+			//tts(body.setup, mapKey);
+			//sleep(1000);
+			//tts(body.delivery, mapKey);
+		}
+	});
+}
+
 let gcptts_lastcallTS = null;
 const textToSpeech = require('@google-cloud/text-to-speech');
 async function tts(text, mapKey) {
@@ -360,13 +388,13 @@ async function tts(text, mapKey) {
 		const keyFilename = 'gcp_auth.json'
 		const client = new textToSpeech.TextToSpeechClient({projectId, keyFilename});
 		// Construct the request
-		const request = {
+		const req = {
 			input: {text: text},
 			voice: {languageCode: LANG, ssmlGender: GEN},
 			audioConfig: {audioEncoding: 'MP3'},
 		};
 		// Performs the text-to-speech request
-		const [response] = await client.synthesizeSpeech(request);
+		const [response] = await client.synthesizeSpeech(req);
 		// Write the binary audio content to a local file
 		const writeFile = util.promisify(fs.writeFile);
 		await writeFile('output.mp3', response.audioContent, 'binary');
@@ -398,7 +426,7 @@ async function process_commands_query(txt, mapKey, user) {
 			}
 		}
 		if (txt.includes('bro') || txt.includes('bra')) {
-			await tts('bruh', mapKey);
+			await tts('bra', mapKey);
 			if (bruhMap.has(user)) {
 				bruhMap.set(user, bruhMap.get(user) + 1);
 			} else {
@@ -424,7 +452,7 @@ async function process_commands_query(txt, mapKey, user) {
 			await tts('uh uh uh ah ah uh oh ah uh oh oh oh', mapKey);
 		}
 		if (txt.includes('smoke')) {
-			await tts('ayy 4 20 blaze it homie', mapKey);
+			await tts('ayy four twenty blaze it homie', mapKey);
 		}
 		if (txt.includes('69')) {
 			await tts('nice', mapKey);
@@ -441,6 +469,31 @@ async function process_commands_query(txt, mapKey, user) {
 		if (txt.includes('ball') || txt.includes('bol')) {
 			await tts('give me my ball back now before i shank your nan you jammy fucker', mapKey);
 		}
+		if (txt.includes('tech support')) {
+			let CUR_LANG = LANG;
+			let CUR_GEN = GEN;
+			LANG = 'en-IN';
+			GEN = 'MALE';
+			await tts('yes so basically you want to open up your task manager and yes you will see here that your computer has been infected with a giga namo tron slimy techno virus', mapKey);
+			LANG = CUR_LANG;
+			GEN = CUR_GEN;
+		}
+		if (txt.includes('sharma')) {
+			let CUR_LANG = LANG;
+			let CUR_GEN = GEN;
+			LANG = 'en-IN';
+			GEN = 'FEMALE';
+			await tts('do you know what is delphi?', mapKey);
+			LANG = CUR_LANG;
+			GEN = CUR_GEN;
+		}
+		if (txt.includes('up up down down left right left right b a start')) {
+			playFile('zelda.mp3', mapKey);
+			await tts('nothing you do or say will ever be funny', mapKey);
+		}
+		if (txt.includes('cure my depression')) {
+			
+		}
 		if (txt.includes('set voice')) {
 			if (txt.includes(' male') || txt.includes('mail')) {
 				GEN = 'MALE';
@@ -450,54 +503,54 @@ async function process_commands_query(txt, mapKey, user) {
 				GEN = 'FEMALE';
 				await tts('i am now an enemy', mapKey);
 			}
-			if (txt.includes('uk') || txt.includes('british') || txt.includes('united kingdom') || txt.includes('england') || txt.includes('english')) {
+			if (txt.includes('uk ') || txt.includes('british') || txt.includes('united kingdom') || txt.includes('england') || txt.includes('english')) {
 				LANG = 'en-GB';
-				sleep(2000);
+				sleep(2500);
 				await tts('british', mapKey);
 			}
-			if (txt.includes('us') || txt.includes('usa') || txt.includes('america') || txt.includes('american')) {
+			if (txt.includes('us ') || txt.includes('usa ') || txt.includes('america') || txt.includes('american')) {
 				LANG = 'en-US';
-				sleep(2000);
+				sleep(2500);
 				await tts('american', mapKey);
 			}
 			if (txt.includes('india') || txt.includes('indian')) {
 				LANG = 'en-IN';
-				sleep(2000);
+				sleep(2500);
 				await tts('indian', mapKey);
 			}
 			if (txt.includes('dutch') || txt.includes('netherlands')) {
 				LANG = 'nl-NL';
-				sleep(2000);
+				sleep(2500);
 				await tts('dutch', mapKey);
 			}
 			if (txt.includes('french') || txt.includes('france')) {
 				LANG = 'fr-FR';
-				sleep(2000);
+				sleep(2500);
 				await tts('french', mapKey);
 			}
 			if (txt.includes('german') || txt.includes('germany')) {
 				LANG = 'de-DE';
-				sleep(2000);
+				sleep(2500);
 				await tts('german', mapKey);
 			}
 			if (txt.includes('italian') || txt.includes('italy')) {
 				LANG = 'it-IT';
-				sleep(2000);
+				sleep(2500);
 				await tts('italian', mapKey);
 			}
 			if (txt.includes('japanese') || txt.includes('japan')) {
 				LANG = 'ja-JP';
-				sleep(2000);
+				sleep(2500);
 				await tts('japanese', mapKey);
 			}
 			if (txt.includes('russian') || txt.includes('russia')) {
 				LANG = 'ru-RU';
-				sleep(2000);
+				sleep(2500);
 				await tts('russian', mapKey);
 			}
 			if (txt.includes('spanish') || txt.includes('spain')) {
 				LANG = 'es-ES';
-				sleep(2000);
+				sleep(2500);
 				await tts('spanish', mapKey);
 			}
 		}
@@ -542,12 +595,12 @@ async function transcribe_gcp(file) {
 			sampleRateHertz: 16000,
 			languageCode: 'en-GB',
 		};
-		const request = {
+		const req = {
 			audio: audio,
 			config: config,
 		};
 		// Detects speech in the audio file
-		const [response] = await client.recognize(request);
+		const [response] = await client.recognize(req);
 		const output = response.results
 			.map(result => result.alternatives[0].transcript)
 			.join('\n');
@@ -571,8 +624,12 @@ discordClient.on('voiceStateUpdate', function(oldMember, newMember){
 			tts('safe travels, fellow gamer', mapKey);
 		}
 		if (oldMember.channelID == null && newMember.channelID == botChannelID) {
-			console.log(oldMember.member.user.username + ' has connected');
-			tts('greetings, fellow gamer', mapKey);
+			console.log(newMember.member.user.username + ' has connected');
+			if (newMember.member.user.username == 'Jaffa72') {
+				tts('hide your hedgehogs, the biter is here chomp chomp', mapKey);
+			} else {
+				tts('greetings, fellow gamer', mapKey);
+			}
 		}
 		if (newMember.deaf == true && newMember.mute == true) {
 			if (newMember.channelID == botChannelID) {
