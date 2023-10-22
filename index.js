@@ -435,21 +435,18 @@ async function process_commands_query(txt, mapKey, user) {
 			let val = guildMap.get(mapKey);
 			val.text_Channel.send(user.username + ' is on ' + bruhMap.get(user) + ' bruh(s)')
 		}
-		if (txt.includes('gaming') || txt.includes('david') || txt.includes('jamie') || txt.includes('cayman') || txt.includes('gay men')) {
-			await tts('gay ming', mapKey);
+		if (txt.includes('gaming') || txt.includes('david') || txt.includes('jamie') || txt.includes('cayman')) {
+			await tts('gaming', mapKey);
 			if (gamingMap.has(user)) {
 				gamingMap.set(user, gamingMap.get(user) + 1);
 			} else {
 				gamingMap.set(user, 1);
 			}
 			let val = guildMap.get(mapKey);
-			val.text_Channel.send(user.username + ' is on ' + gamingMap.get(user) + ' GaYming(s)')
+			val.text_Channel.send(user.username + ' is on ' + gamingMap.get(user) + ' Gaming(s)')
 		}
 		if (txt.includes('toxic') || txt.includes('talk sec')) {
-			await tts('stop chatting shit you mother fucker. su car la mink', mapKey);
-		}
-		if (txt.includes('nut')) {
-			await tts('uh uh uh ah ah uh oh ah uh oh oh oh', mapKey);
+			await tts('stop chatting rubbish', mapKey);
 		}
 		if (txt.includes('smoke')) {
 			await tts('ayy four twenty blaze it homie', mapKey);
@@ -458,16 +455,13 @@ async function process_commands_query(txt, mapKey, user) {
 			await tts('nice', mapKey);
 		}
 		if (txt.includes('thanos car')) {
-			await tts('ahh fuck I lost the game', mapKey);
+			await tts('ahh damn I lost the game', mapKey);
 		}
 		if (txt.includes('jason derulo')) {
 			playFile('jason.mp3', mapKey);
 		}
 		if (txt.includes('blicky') || txt.includes('licky') || txt.includes('blakey') || txt.includes('lakey') || txt.includes('wiki')) {
 			playFile('gooba.mp3', mapKey);
-		}
-		if (txt.includes('ball') || txt.includes('bol')) {
-			await tts('give me my ball back now before i shank your nan you jammy fucker', mapKey);
 		}
 		if (txt.includes('tech support')) {
 			let CUR_LANG = LANG;
@@ -501,7 +495,7 @@ async function process_commands_query(txt, mapKey, user) {
 			} 
 			if (txt.includes('female')) {
 				GEN = 'FEMALE';
-				await tts('i am now an enemy', mapKey);
+				await tts('i am now an woman', mapKey);
 			}
 			if (txt.includes('uk ') || txt.includes('british') || txt.includes('united kingdom') || txt.includes('england') || txt.includes('english')) {
 				LANG = 'en-GB';
@@ -634,7 +628,7 @@ discordClient.on('voiceStateUpdate', function(oldMember, newMember){
 		if (newMember.deaf == true && newMember.mute == true) {
 			if (newMember.channelID == botChannelID) {
 				if (newMember.member.user.username == 'BBWarick') {
-					tts('uh oh, harry has gone AF gay', mapKey);
+					tts('uh oh, harry has gone AFK', mapKey);
 				}
 				else {
 					tts(newMember.member.nickname.toLowerCase() + ' has gone AFK', mapKey);
